@@ -2,7 +2,7 @@ const $=id=>document.getElementById(id), Q=window.QUESTIONS, KEY='mononome-v1';
 const blank=()=>({mistakes:{},attempts:{},correct:{},position:0,history:[],updatedAt:0});
 let data=(()=>{try{return {...blank(),...JSON.parse(localStorage.getItem(KEY))}}catch{return blank()}})();
 let auth=null,db=null,user=null,cloud=false,mode='all',queue=[],idx=0,choice=null,answered=false,screen='home',threshold=1;
-const save=async()=>{data.updatedAt=Date.now();localStorage.setItem(KEY,JSON.stringify(data));if(cloud&&user){try{await db.setDoc(db.doc(db.getFirestore(),'families',user.uid),data)}catch(e){$('status').textContent='クラウド保存失敗：端末には保存済み'}}};
+const save=async()=>{data.updatedAt=Date.now();localStorage.setItem(KEY,JSON.stringify(data));if(cloud&&user){try{await db.setDoc(db.doc(db.getFirestore(),'families',user.uid),data,{merge:true})}catch(e){$('status').textContent='クラウド保存失敗：端末には保存済み'}}};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const btn=(label,fn,cl='')=>`<button class="btn ${cl}" data-action="${fn}">${label}</button>`;
 const head=(name)=>`<div class="row"><h2>${name}</h2><button class="btn alt" style="width:auto;padding:10px" data-action="home">⌂ ホーム</button></div>`;
